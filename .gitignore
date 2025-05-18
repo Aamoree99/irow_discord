@@ -1,0 +1,14 @@
+# Node modules
+node_modules/
+
+# dotenv
+.env
+
+# logs
+logs/
+*.log
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
