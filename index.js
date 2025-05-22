@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, Partials, Collection, REST, Routes } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
+const startFuelCheckCron = require('./cron/checkStations');
 
 // === Инициализация клиента ===
 const client = new Client({
@@ -149,6 +150,8 @@ client.once('ready', async () => {
 
     await ensureTicketButtonMessage();
     await restoreEventTimers();
+
+    await startFuelCheckCron(client);
 });
 
 client.login(process.env.DISCORD_TOKEN).catch(err => {
