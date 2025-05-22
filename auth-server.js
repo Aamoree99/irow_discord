@@ -150,11 +150,14 @@ app.get('/callback', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Auth server running at http://localhost:3000');
-});
+function startAuthServer() {
+    app.listen(3000, () => {
+        console.log('🔑 Auth server running at http://localhost:3000');
+    });
+}
 
 module.exports = {
+    startAuthServer,
     refreshAccessToken,
     fetchCorporationStructures
 };

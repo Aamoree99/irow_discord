@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, Partials, Collection, REST, Routes } = requir
 const fs = require('fs');
 const path = require('path');
 const startFuelCheckCron = require('./cron/checkStations');
+const {startAuthServer} = require("./auth-server");
 
 // === Инициализация клиента ===
 const client = new Client({
@@ -150,6 +151,8 @@ client.once('ready', async () => {
 
     await ensureTicketButtonMessage();
     await restoreEventTimers();
+
+    startAuthServer();
 
     await startFuelCheckCron(client);
 });
