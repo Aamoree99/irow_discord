@@ -61,26 +61,32 @@ async function runFuelCheck(client) {
         fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
         console.log('[CRON] 💾 config.json updated.');
 
+        console.log('[CRON] 📋 Full station fuel report:');
+        config.stations.forEach(s => {
+            const expires = s.fuel_expires
+                ? new Date(s.fuel_expires).toISOString()
+                : 'Unknown';
+
+            const remaining = s.fuel_remaining_ms === null
+                ? '⛔ Out of fuel'
+                : `${msToTime(s.fuel_remaining_ms)}`;
+
+            const status = s.fuel_remaining_ms === null
+                ? '[NO FUEL]'
+                : s.fuel_remaining_ms < 7 * 24 * 60 * 60 * 1000
+                    ? '[LOW]'
+                    : '[OK]';
+
+            console.log(`${status} - ${s.name || 'Unnamed'} | ${remaining} | Expires: ${expires}`);
+        });
+
+
         const lowFuelStations = config.stations.filter(s =>
             s.fuel_remaining_ms === null || s.fuel_remaining_ms < 7 * 24 * 60 * 60 * 1000
         );
 
         if (lowFuelStations.length > 0) {
             console.log(`[CRON] 🚨 ${lowFuelStations.length} stations are low on fuel.`);
-
-            console.log('[CRON] 📋 Station fuel status:');
-            config.stations.forEach(s => {
-                const expires = s.fuel_expires
-                    ? new Date(s.fuel_expires).toISOString()
-                    : 'Unknown';
-
-                const remaining = s.fuel_remaining_ms === null
-                    ? '⛔ Out of fuel'
-                    : `${msToTime(s.fuel_remaining_ms)}`;
-
-                console.log(`- ${s.name || 'Unnamed'} | ${remaining} | Expires: ${expires}`);
-            });
-
 
             try {
                 const channel = await client.channels.fetch(channelId);
