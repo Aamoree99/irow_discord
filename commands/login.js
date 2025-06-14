@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
-const AUTHORIZED_USER_ID = '179905495186800641';
+const AUTHORIZED_USER_ID = '1193159820052803778';
 const configPath = path.join(__dirname, '../data/config.json');
 const AUTH_URL_BASE = 'http://localhost:3000/login?discord_id=';
 

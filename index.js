@@ -140,7 +140,7 @@ async function ensureTicketButtonMessage() {
 client.once('ready', async () => {
     console.log(`✅ Logged in as ${client.user.tag}`);
     client.user.setPresence({
-        activities: [{ name: 'helping Dario', type: 0 }], // type 0 = Playing
+        activities: [{ name: 'with Dario\'s patience', type: 0 }], // type 0 = Playing
         status: 'online'
     });
 

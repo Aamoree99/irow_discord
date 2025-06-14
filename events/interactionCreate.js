@@ -326,6 +326,36 @@ module.exports = {
             }
         }
 
+        if (interaction.isModalSubmit() && interaction.customId === 'setup_modal') {
+            const configPath = path.join(__dirname, '../data/config.json');
+
+            const eventChannelId = interaction.fields.getTextInputValue('event_channel');
+            const ticketChannelId = interaction.fields.getTextInputValue('ticket_channel');
+            const fuelChannelId = interaction.fields.getTextInputValue('fuel_channel');
+            const roleIdsRaw = interaction.fields.getTextInputValue('event_roles');
+
+            const eventCreatorRoleIds = roleIdsRaw
+                .split(',')
+                .map(id => id.trim())
+                .filter(id => id.length > 0);
+
+            const newConfig = {
+                eventChannelId,
+                ticketChannelId,
+                fuelChannelId,
+                eventCreatorRoleIds
+            };
+
+            try {
+                fs.writeFileSync(configPath, JSON.stringify(newConfig, null, 2));
+                await interaction.reply({ content: '✅ Configuration updated successfully!', ephemeral: true });
+            } catch (err) {
+                console.error('❌ Failed to save config:', err);
+                await interaction.reply({ content: '❌ Failed to save configuration.', ephemeral: true });
+            }
+        }
+
+
     }
 };
 

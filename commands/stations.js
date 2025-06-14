@@ -61,7 +61,7 @@ module.exports = {
 
         await interaction.reply({
             content: stationList.join('\n\n'),
-            ephemeral: false
+            ephemeral: true
         });
     }
 };

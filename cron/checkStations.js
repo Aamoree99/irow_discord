@@ -19,7 +19,7 @@ async function startFuelCheckCron(client) {
 
         const discordId = Object.keys(config.tokens || {})[0];
         const tokenData = config.tokens?.[discordId];
-        const channelId = config.eventChannelId;
+        const channelId = config.fuelChannelId;
 
         if (!discordId || !tokenData || !channelId) return;
 

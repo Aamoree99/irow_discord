@@ -1,5 +1,9 @@
 {
-  "ticketChannelId": "1325954514582503628",
   "eventChannelId": "1325445036443304006",
-  "eventCreatorRoleIds": ["1307352064296489086", "1307352531445350480"]
+  "ticketChannelId": "1325954514582503628",
+  "fuelChannelId": "1383378493189914696",
+  "eventCreatorRoleIds": [
+    "1307352064296489086",
+    "1307352531445350480"
+  ]
 }

@@ -28,6 +28,7 @@ module.exports = {
         let config = {
             ticketChannelId: '',
             eventChannelId: '',
+            fuelChannelId: '',
             eventCreatorRoleIds: []
         };
 
@@ -55,6 +56,13 @@ module.exports = {
             .setRequired(true)
             .setValue(config.ticketChannelId || '');
 
+        const fuelChannelInput = new TextInputBuilder() // Новый input
+            .setCustomId('fuel_channel')
+            .setLabel('Fuel Channel ID')
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+            .setValue(config.fuelChannelId || '');
+
         const eventRolesInput = new TextInputBuilder()
             .setCustomId('event_roles')
             .setLabel('Creator Role IDs (comma separated)')
@@ -64,9 +72,10 @@ module.exports = {
 
         const row1 = new ActionRowBuilder().addComponents(eventChannelInput);
         const row2 = new ActionRowBuilder().addComponents(ticketChannelInput);
-        const row3 = new ActionRowBuilder().addComponents(eventRolesInput);
+        const row3 = new ActionRowBuilder().addComponents(fuelChannelInput); // Новый ряд
+        const row4 = new ActionRowBuilder().addComponents(eventRolesInput);
 
-        modal.addComponents(row1, row2, row3);
+        modal.addComponents(row1, row2, row3, row4); // Добавлен 4-й ряд
 
         await interaction.showModal(modal);
     }
