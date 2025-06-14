@@ -41,9 +41,9 @@ async function startFuelCheckCron(client) {
             fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
 
             const lowFuelStations = config.stations.filter(s =>
-                s.fuel_remaining_ms !== null &&
-                s.fuel_remaining_ms < 7 * 24 * 60 * 60 * 1000
+                s.fuel_remaining_ms === null || s.fuel_remaining_ms < 7 * 24 * 60 * 60 * 1000
             );
+
 
             if (lowFuelStations.length > 0) {
                 const channel = await client.channels.fetch(channelId);

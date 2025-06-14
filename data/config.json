@@ -1,9 +1,117 @@
 {
-  "eventChannelId": "1325445036443304006",
   "ticketChannelId": "1325954514582503628",
-  "fuelChannelId": "1383378493189914696",
+  "eventChannelId": "1325445036443304006",
   "eventCreatorRoleIds": [
     "1307352064296489086",
     "1307352531445350480"
+  ],
+  "tokens": {
+    "1193159820052803778": {
+      "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IkpXVC1TaWduYXR1cmUtS2V5IiwidHlwIjoiSldUIn0.eyJzY3AiOlsicHVibGljRGF0YSIsImVzaS1jb3Jwb3JhdGlvbnMucmVhZF9zdHJ1Y3R1cmVzLnYxIl0sImp0aSI6ImQxNGViN2I1LWM3NDEtNGUyMC1hM2MxLTFmN2IxMTAyYzFmOCIsImtpZCI6IkpXVC1TaWduYXR1cmUtS2V5Iiwic3ViIjoiQ0hBUkFDVEVSOkVWRToyMTIyOTk2ODg3IiwiYXpwIjoiMWUyY2E1ZTI1Mjg2NGM2MmE3ZjVkNTcxOGVjYzYxZGEiLCJ0ZW5hbnQiOiJ0cmFucXVpbGl0eSIsInRpZXIiOiJsaXZlIiwicmVnaW9uIjoid29ybGQiLCJhdWQiOlsiMWUyY2E1ZTI1Mjg2NGM2MmE3ZjVkNTcxOGVjYzYxZGEiLCJFVkUgT25saW5lIl0sIm5hbWUiOiJNYXN0ZXIgb2YgRC1JIiwib3duZXIiOiJrWGlvU2JhNGFmVy9iUUNybkplN0l2bHhUNU09IiwiZXhwIjoxNzQ5ODEzNTk5LCJpYXQiOjE3NDk4MTIzOTksImlzcyI6Imh0dHBzOi8vbG9naW4uZXZlb25saW5lLmNvbSJ9.HNp0DsaKYS5QA6zRLG5jBGmRNnWmVjOtLpmB768Dy_cT0crJnEtJIkhvXEslls1SeUd_YnGSqTMW_qjPbVcrbEqGeXfOF_yugK_fK2gIu4Ul4cN35GHEC6uOseyNTCFr3nTc-B5YAGH2ScMj-b1Q3vgoOhOVnR3r8U2jm9oD_2dRSSp2UTZnOxnR9QloED2Pzpu6ot4ZvNj0GGEA1HBbvFigZ-TQi7coiW6ujsyN2NSGSSRpZ1NCuNtKcNclg2SmJ3tV7FCN6GOhy9hEGu6MwiSkw1hXXrA6V8mi27vtCUbm1FwSPyfH6rbo6IVpJRvHRgr20I1E_8ZwAQza7abPPg",
+      "refresh_token": "OqhU4mhTU0WTXgwEKQmhtA=="
+    }
+  },
+  "stations": [
+    {
+      "id": 1049095309393,
+      "name": "D-I9HJ - Aladeen's Space Laser L1",
+      "fuel_expires": "2025-07-10T04:00:00Z",
+      "fuel_remaining_ms": 2307599672
+    },
+    {
+      "id": 1045157378896,
+      "name": "D-I9HJ - Aladeen's Secret Weapon Lab",
+      "fuel_expires": "2025-07-31T00:00:00Z",
+      "fuel_remaining_ms": 4107599672
+    },
+    {
+      "id": 1046605987153,
+      "name": "D-I9HJ - General Toni's Palace",
+      "fuel_expires": "2025-09-08T19:00:00Z",
+      "fuel_remaining_ms": 7545599672
+    },
+    {
+      "id": 1047014500595,
+      "name": "D-I9HJ - Aladeen's Space Laser K1",
+      "fuel_expires": "2025-07-27T23:00:00Z",
+      "fuel_remaining_ms": 3844799672
+    },
+    {
+      "id": 1045157345235,
+      "name": "D-I9HJ - Aladeen's Oil Drill",
+      "fuel_expires": "2025-07-22T07:00:00Z",
+      "fuel_remaining_ms": 3355199672
+    },
+    {
+      "id": 1048023643747,
+      "name": "8-KZXQ - Aladeen's Electric Car Factory",
+      "fuel_expires": "2025-07-31T01:00:00Z",
+      "fuel_remaining_ms": 4111199672
+    },
+    {
+      "id": 1046102442905,
+      "name": "D-I9HJ - Aladeen's Botox Production",
+      "fuel_expires": "2025-07-30T13:00:00Z",
+      "fuel_remaining_ms": 4067999672
+    },
+    {
+      "id": 1035809282718,
+      "name": "PYY3-5 - Waffle House",
+      "fuel_expires": "2025-08-22T20:00:00Z",
+      "fuel_remaining_ms": 6080399672
+    },
+    {
+      "id": 1046377770398,
+      "name": "PYY3-5 - NF Peaceful uranium refinery",
+      "fuel_expires": "2025-07-30T12:00:00Z",
+      "fuel_remaining_ms": 4064399672
+    },
+    {
+      "id": 1047425498210,
+      "name": "8-KZXQ - Wadiyan Border Partrol",
+      "fuel_expires": "2025-09-19T01:00:00Z",
+      "fuel_remaining_ms": 8431199672
+    },
+    {
+      "id": 1046756489347,
+      "name": "D-I9HJ - Aladeen's Space Laser L2",
+      "fuel_expires": "2025-07-12T09:00:00Z",
+      "fuel_remaining_ms": 2498399672
+    },
+    {
+      "id": 1035809312774,
+      "name": "8-KZXQ - Wadiyan citizen compressor",
+      "fuel_expires": "2025-07-22T01:00:00Z",
+      "fuel_remaining_ms": 3333599672
+    },
+    {
+      "id": 1047014521702,
+      "name": "D-I9HJ - Aladeen's Space Laser K2",
+      "fuel_expires": "2025-07-11T15:00:00Z",
+      "fuel_remaining_ms": 2433599672
+    },
+    {
+      "id": 1046377780999,
+      "name": "PYY3-5 - NF Aladeen's pointy rocket site",
+      "fuel_expires": "2025-07-23T21:00:00Z",
+      "fuel_remaining_ms": 3491999672
+    },
+    {
+      "id": 1049607950280,
+      "name": "PYY3-5 - Electric car factory 2",
+      "fuel_remaining_ms": null
+    },
+    {
+      "id": 1045157369706,
+      "name": "D-I9HJ - Aladeen's Luxury Car Depot",
+      "fuel_expires": "2025-07-11T22:00:00Z",
+      "fuel_remaining_ms": 2458799672
+    },
+    {
+      "id": 1048019414603,
+      "name": "D-I9HJ - Aladeen's Space Laser K3",
+      "fuel_expires": "2025-07-24T05:00:00Z",
+      "fuel_remaining_ms": 3520799672
+    }
   ]
 }
