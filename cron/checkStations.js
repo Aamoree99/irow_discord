@@ -94,7 +94,7 @@ async function runFuelCheck(client) {
 }
 
 async function startFuelCheckCron(client) {
-    cron.schedule('*/5 * * * *', async () => {
+    cron.schedule('0 11 * * *', async () => {
         await runFuelCheck(client);
     }, {
         timezone: 'Etc/UTC'
