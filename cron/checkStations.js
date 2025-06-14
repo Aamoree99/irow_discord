@@ -103,4 +103,7 @@ async function startFuelCheckCron(client) {
     console.log('[CRON] Scheduled fuel check every 5 minutes.');
 }
 
-module.exports = startFuelCheckCron;
+module.exports = {
+    startFuelCheckCron,
+    runFuelCheck
+};
