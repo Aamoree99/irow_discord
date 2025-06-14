@@ -2,7 +2,7 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, Partials, Collection, REST, Routes } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
-const startFuelCheckCron = require('./cron/checkStations');
+const { startFuelCheckCron } = require('./cron/checkStations');
 const {startAuthServer} = require("./auth-server");
 
 // === Инициализация клиента ===
