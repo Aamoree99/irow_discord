@@ -11,7 +11,12 @@ module.exports = {
 
     async execute(interaction) {
         const adminRoleId = process.env.ADMIN_ROLE_ID;
+
+        console.log(`[FuelCheck] Command triggered by ${interaction.user.tag} (${interaction.user.id})`);
+        console.log('[FuelCheck] Member roles:', interaction.member.roles.cache.map(r => r.id));
+
         if (!interaction.member.roles.cache.has(adminRoleId)) {
+            console.warn('[FuelCheck] Permission denied.');
             return interaction.reply({
                 content: '❌ You do not have permission to use this command.',
                 ephemeral: true
@@ -20,16 +25,17 @@ module.exports = {
 
         await interaction.deferReply({ ephemeral: true });
 
-        // Загрузка конфигурации
         let config;
         try {
             config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            console.log('[FuelCheck] config.json loaded.');
         } catch (err) {
             console.error('❌ Failed to load config:', err);
             return interaction.editReply('❌ Could not read config.json.');
         }
 
         const channelId = config.fuelChannelId;
+        console.log('[FuelCheck] fuelChannelId =', channelId);
 
         if (!channelId) {
             return interaction.editReply('❌ No fuelChannelId configured.');
@@ -37,9 +43,14 @@ module.exports = {
 
         try {
             const channel = await interaction.client.channels.fetch(channelId);
-            if (!channel) throw new Error('Channel not found');
+            console.log('[FuelCheck] Channel fetched:', channel?.name || 'Unknown');
+
+            if (!channel || !channel.send) {
+                throw new Error('Channel not found or not text-based');
+            }
 
             await channel.send('✅ Fuel test successful. This message confirms bot access to this channel.');
+            console.log('[FuelCheck] Test message sent.');
             await interaction.editReply('✅ Test message sent to fuel channel.');
         } catch (err) {
             console.error('❌ Failed to send test message:', err);
