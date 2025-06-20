@@ -58,7 +58,7 @@ module.exports = {
 
         const fuelChannelInput = new TextInputBuilder() // Новый input
             .setCustomId('fuel_channel')
-            .setLabel('Fuel Channel ID')
+            .setLabel('Management Channel ID')
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
             .setValue(config.fuelChannelId || '');
