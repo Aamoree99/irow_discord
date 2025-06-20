@@ -38,45 +38,60 @@ async function runSovereigntyCheck(client) {
     try {
         const response = await axios.get(SOVEREIGNTY_URL);
         const sovereigntyData = response.data;
-        console.log(`[CRON] 📊 Retrieved sovereignty data for ${sovereigntyData.length} systems.`);
+        console.log(`[CRON] 📊 Retrieved sovereignty data for ${sovereigntyData.length} structures.`);
 
-        let postContent = "**System Sovereignty Status**\n\n";
+        let postContent = "**System Sovereignty Status (ADM Levels)**\n\n";
         let warningSystems = [];
         let updatedSystems = [];
 
+        console.log('[CRON] 📋 Full system ADM report:');
         config.systems.forEach(system => {
-            const sovInfo = sovereigntyData.find(item => item.system_id === system.id);
+            // Находим все структуры в этой системе
+            const systemStructures = sovereigntyData.filter(item => item.solar_system_id === system.id);
             const systemName = system.name || `System ID: ${system.id}`;
 
-            if (sovInfo) {
-                const vulnerabilityLevel = sovInfo.vulnerability_occupancy_level || 0;
-                const status = vulnerabilityLevel >= 4 ? '✅' : '⚠️ ATTENTION';
+            if (systemStructures.length > 0) {
+                // Берем максимальный ADM среди всех структур в системе
+                const maxADM = Math.max(...systemStructures.map(s => s.vulnerability_occupancy_level || 0));
+                const roundedADM = Math.round(maxADM * 10) / 10; // Округляем до 1 знака после запятой
+                const status = maxADM >= 4 ? 'OK' : 'LOW';
+                const statusIcon = maxADM >= 4 ? '✅' : '⚠️';
 
-                postContent += `**${systemName}**: Level ${vulnerabilityLevel} ${status}\n`;
+                postContent += `**${systemName}**: ADM ${roundedADM} ${statusIcon}\n`;
 
-                if (vulnerabilityLevel < 4) {
-                    warningSystems.push(systemName);
+                if (maxADM < 4) {
+                    warningSystems.push(`${systemName} (ADM ${roundedADM})`);
                 }
+
+                // Логирование в консоль
+                console.log(`[${status}] - ${systemName} | ADM: ${roundedADM} | Structures: ${systemStructures.length}`);
 
                 updatedSystems.push({
                     id: system.id,
                     name: systemName,
-                    vulnerability_level: vulnerabilityLevel,
+                    adm_level: roundedADM,
+                    structures_count: systemStructures.length,
                     last_checked: new Date().toISOString()
                 });
             } else {
                 postContent += `**${systemName}**: No sovereignty data\n`;
+                console.log(`[NO DATA] - ${systemName} | No structures in system`);
+
                 updatedSystems.push({
                     id: system.id,
                     name: systemName,
-                    vulnerability_level: null,
+                    adm_level: null,
+                    structures_count: 0,
                     last_checked: new Date().toISOString()
                 });
             }
         });
 
         if (warningSystems.length > 0) {
-            postContent += `\n🚨 **Warning!** The following systems have low sovereignty: ${warningSystems.join(', ')}`;
+            postContent += `\n🚨 **Warning!** Low ADM in: ${warningSystems.join(', ')}`;
+            console.log(`[CRON] 🚨 ${warningSystems.length} systems with low ADM`);
+        } else {
+            console.log('[CRON] ✅ All systems have sufficient ADM levels.');
         }
 
         // Update system data in config
@@ -89,46 +104,38 @@ async function runSovereigntyCheck(client) {
                 return;
             }
 
-            // Проверяем, есть ли уже сообщение в конфиге
+            // Управление сообщениями (как в предыдущей версии)
             if (config.sovereigntyMessageId) {
                 try {
-                    // Проверяем, есть ли сообщения после нашего
                     const messages = await channel.messages.fetch({ limit: 5 });
                     const ourMessageIndex = messages.findIndex(m => m.id === config.sovereigntyMessageId);
 
-                    // Если наше сообщение не последнее или не найдено
                     if (ourMessageIndex !== 0 || ourMessageIndex === -1) {
-                        // Удаляем старое сообщение, если найдено
                         if (ourMessageIndex !== -1) {
                             await messages.get(config.sovereigntyMessageId)?.delete();
                             console.log('[CRON] ♻️ Deleted old sovereignty message');
                         }
 
-                        // Создаем новое сообщение
                         const newMessage = await channel.send(postContent);
                         config.sovereigntyMessageId = newMessage.id;
                         console.log('[CRON] ✨ Created new sovereignty message');
                     } else {
-                        // Редактируем существующее сообщение
                         const message = await channel.messages.fetch(config.sovereigntyMessageId);
                         await message.edit(postContent);
                         console.log('[CRON] 🔄 Updated existing sovereignty message');
                     }
                 } catch (err) {
                     console.error('[CRON] ❌ Failed to manage messages:', err.message);
-                    // Если ошибка при работе с сообщением, создаем новое
                     const newMessage = await channel.send(postContent);
                     config.sovereigntyMessageId = newMessage.id;
                     console.log('[CRON] ✨ Created new sovereignty message after error');
                 }
             } else {
-                // Если нет сохраненного ID сообщения, создаем новое
                 const newMessage = await channel.send(postContent);
                 config.sovereigntyMessageId = newMessage.id;
                 console.log('[CRON] ✨ Created initial sovereignty message');
             }
 
-            // Сохраняем обновленный конфиг
             fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
             console.log('[CRON] 💾 Updated config with message ID');
 
@@ -145,14 +152,13 @@ async function runSovereigntyCheck(client) {
 }
 
 async function startSovereigntyCheckCron(client) {
-    // Schedule: Every 30 minutes
     cron.schedule('*/30 * * * *', async () => {
         await runSovereigntyCheck(client);
     }, {
         timezone: 'Etc/UTC'
     });
 
-    console.log('[CRON] ⏰ Scheduled sovereignty check every 30 minutes.');
+    console.log('[CRON] ⏰ Scheduled ADM check every 30 minutes.');
 }
 
 module.exports = {
