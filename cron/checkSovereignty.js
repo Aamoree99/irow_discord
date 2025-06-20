@@ -46,14 +46,12 @@ async function runSovereigntyCheck(client) {
 
         console.log('[CRON] 📋 Full system ADM report:');
         config.systems.forEach(system => {
-            // Находим все структуры в этой системе
             const systemStructures = sovereigntyData.filter(item => item.solar_system_id === system.id);
             const systemName = system.name || `System ID: ${system.id}`;
 
             if (systemStructures.length > 0) {
-                // Берем максимальный ADM среди всех структур в системе
                 const maxADM = Math.max(...systemStructures.map(s => s.vulnerability_occupancy_level || 0));
-                const roundedADM = Math.round(maxADM * 10) / 10; // Округляем до 1 знака после запятой
+                const roundedADM = Math.round(maxADM * 10) / 10;
                 const status = maxADM >= 4 ? 'OK' : 'LOW';
                 const statusIcon = maxADM >= 4 ? '✅' : '⚠️';
 
@@ -63,7 +61,6 @@ async function runSovereigntyCheck(client) {
                     warningSystems.push(`${systemName} (ADM ${roundedADM})`);
                 }
 
-                // Логирование в консоль
                 console.log(`[${status}] - ${systemName} | ADM: ${roundedADM} | Structures: ${systemStructures.length}`);
 
                 updatedSystems.push({
@@ -104,25 +101,27 @@ async function runSovereigntyCheck(client) {
                 return;
             }
 
-            // Управление сообщениями (как в предыдущей версии)
+            // Управление сообщениями (исправленная версия)
             if (config.sovereigntyMessageId) {
                 try {
-                    const messages = await channel.messages.fetch({ limit: 5 });
-                    const ourMessageIndex = messages.findIndex(m => m.id === config.sovereigntyMessageId);
+                    // Пытаемся найти существующее сообщение
+                    let existingMessage;
+                    try {
+                        existingMessage = await channel.messages.fetch(config.sovereigntyMessageId);
+                    } catch (fetchError) {
+                        console.log('[CRON] ℹ️ Existing message not found, will create new one');
+                        existingMessage = null;
+                    }
 
-                    if (ourMessageIndex !== 0 || ourMessageIndex === -1) {
-                        if (ourMessageIndex !== -1) {
-                            await messages.get(config.sovereigntyMessageId)?.delete();
-                            console.log('[CRON] ♻️ Deleted old sovereignty message');
-                        }
-
+                    if (existingMessage) {
+                        // Если сообщение найдено - редактируем его
+                        await existingMessage.edit(postContent);
+                        console.log('[CRON] 🔄 Updated existing sovereignty message');
+                    } else {
+                        // Если сообщение не найдено - создаем новое
                         const newMessage = await channel.send(postContent);
                         config.sovereigntyMessageId = newMessage.id;
-                        console.log('[CRON] ✨ Created new sovereignty message');
-                    } else {
-                        const message = await channel.messages.fetch(config.sovereigntyMessageId);
-                        await message.edit(postContent);
-                        console.log('[CRON] 🔄 Updated existing sovereignty message');
+                        console.log('[CRON] ✨ Created new sovereignty message (replacement for missing)');
                     }
                 } catch (err) {
                     console.error('[CRON] ❌ Failed to manage messages:', err.message);
@@ -131,11 +130,13 @@ async function runSovereigntyCheck(client) {
                     console.log('[CRON] ✨ Created new sovereignty message after error');
                 }
             } else {
+                // Если ID сообщения не сохранено - создаем новое сообщение
                 const newMessage = await channel.send(postContent);
                 config.sovereigntyMessageId = newMessage.id;
                 console.log('[CRON] ✨ Created initial sovereignty message');
             }
 
+            // Сохраняем обновленный конфиг
             fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
             console.log('[CRON] 💾 Updated config with message ID');
 
@@ -153,7 +154,11 @@ async function runSovereigntyCheck(client) {
 
 async function startSovereigntyCheckCron(client) {
     cron.schedule('*/30 * * * *', async () => {
-        await runSovereigntyCheck(client);
+        try {
+            await runSovereigntyCheck(client);
+        } catch (err) {
+            console.error('[CRON] ❌ Error in scheduled task:', err);
+        }
     }, {
         timezone: 'Etc/UTC'
     });
