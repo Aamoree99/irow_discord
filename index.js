@@ -157,7 +157,7 @@ client.once('ready', async () => {
 
     await startFuelCheckCron(client);
     await startSovereigntyCheckCron(client);
-    await runSovereigntyCheck;
+    await runSovereigntyCheck(client);
 });
 
 client.login(process.env.DISCORD_TOKEN).catch(err => {
