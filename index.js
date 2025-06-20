@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits, Partials, Collection, REST, Routes } = requir
 const fs = require('fs');
 const path = require('path');
 const { startFuelCheckCron } = require('./cron/checkStations');
-const { startSovereigntyCheckCron } = require('./cron/checkSovereignty');
+const { startSovereigntyCheckCron, runSovereigntyCheck } = require('./cron/checkSovereignty');
 const {startAuthServer} = require("./auth-server");
 
 // === Инициализация клиента ===
@@ -157,6 +157,7 @@ client.once('ready', async () => {
 
     await startFuelCheckCron(client);
     await startSovereigntyCheckCron(client);
+    await runSovereigntyCheck;
 });
 
 client.login(process.env.DISCORD_TOKEN).catch(err => {
